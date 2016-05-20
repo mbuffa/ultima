@@ -1,4 +1,5 @@
 %w(
+  coordinates
   grid
   critter
 ).each { |filename| require "ultima/world/#{filename}" }

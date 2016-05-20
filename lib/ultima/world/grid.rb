@@ -7,19 +7,6 @@ module Ultima
       :west
     ].freeze
 
-    class Coordinates < Array
-      def initialize(x, z)
-        super(2)
-        self[0] = x
-        self[1] = z
-      end
-
-      def +(other)
-        raise ArgumentError, "Must have the same size" if other.size != size
-        map.with_index { |x, i| x + other[i] }
-      end
-    end
-
     class Grid
       DIRECTION_TO_MOVE = {
         north: Coordinates.new(0, 1),

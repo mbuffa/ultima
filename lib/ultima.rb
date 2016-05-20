@@ -2,6 +2,7 @@ require 'gosu'
 
 %w(
   version
+  util
   colors
   singer
   world
