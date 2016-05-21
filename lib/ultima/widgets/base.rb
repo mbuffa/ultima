@@ -1,6 +1,8 @@
 module Ultima
   module Widgets
     class Base
+      extend Ultima::Util::Abstract
+
       attr_reader :image
 
       def initialize(image)
@@ -15,20 +17,7 @@ module Ultima
         @image.height
       end
 
-      def draw
-        not_implemented
-      end
-
-      def update
-        not_implemented
-      end
-
-      private
-
-      def not_implemented
-        message = "You need to implement ##{caller_locations(1, 1)[0].label}."
-        raise NoMethodError.new, message
-      end
+      abstract_methods(:draw, :update)
     end
   end
 end
