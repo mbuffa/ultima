@@ -3,14 +3,12 @@ module Ultima
     class Coordinates < Array
       extend Util::Hinting
 
-      hint [:x, :z], Fixnum
-
       def initialize(x, z)
         super(2)
         self[0] = x
         self[1] = z
       end
-      hint_method(:initialize)
+      hint_method(:initialize, [Fixnum, Fixnum])
 
       def +(other)
         raise ArgumentError, 'Must have the same size' if other.size != size

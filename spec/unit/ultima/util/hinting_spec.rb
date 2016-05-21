@@ -8,20 +8,12 @@ describe Ultima::Util::Hinting do
       Foo.class_eval do
         extend Ultima::Util::Hinting
 
-        hint :a, String
-        hint :b, Fixnum
-
         def initialize(a, b)
           @a = a
           @b = b
         end
-        hint_method :initialize
+        hint_method(:initialize, [String, Fixnum])
       end
-    end
-
-    context '#hint' do
-      it { expect(Foo.hinting[:a]).to eq(String) }
-      it { expect(Foo.hinting[:b]).to eq(Fixnum) }
     end
 
     context '#hint_method' do
@@ -29,7 +21,8 @@ describe Ultima::Util::Hinting do
     end
 
     context '#new' do
-      it { expect { Foo.new(1.5, 'foo').to_raise(ArgumentError) } }
+      it { expect { Foo.new('Hey', 5) }.not_to raise_error }
+      it { expect { Foo.new(1.5, 'foo') }.to raise_error(ArgumentError) }
     end
   end
 end
