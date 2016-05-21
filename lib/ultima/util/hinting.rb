@@ -5,7 +5,7 @@ module Ultima
     # #hint_method(your_method_symbol) after its definition.
     # It'll raise an ArgumentError if types mismatch.
     module Hinting
-      @@hinting = Hash.new()
+      @@hinting = Hash.new
 
       def self.extended(base)
         base.class_eval do

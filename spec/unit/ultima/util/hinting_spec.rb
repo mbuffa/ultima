@@ -21,6 +21,7 @@ describe Ultima::Util::Hinting do
 
     context '#hint' do
       it { expect(Foo.hinting[:a]).to eq(String) }
+      it { expect(Foo.hinting[:b]).to eq(Fixnum) }
     end
 
     context '#hint_method' do
