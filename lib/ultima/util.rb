@@ -1,4 +1,6 @@
 %w(
+  exceptions
+  abstract
   hinting
 ).each { |filename| require "ultima/util/#{filename}" }
 
