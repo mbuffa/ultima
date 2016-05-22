@@ -3,7 +3,7 @@ module Ultima
     module Fading
       def initialize_fading(options)
         # TODO: Find a way to handle any color.
-        @color = Gosu::Color.argb(Colors::INVISIBLE_WHITE) if options[:fadein]
+        @color = Gosu::Color.argb(Core::Colors::INVISIBLE_WHITE) if options[:fadein]
 
         @elapsed_time = 0
         @fade = 0

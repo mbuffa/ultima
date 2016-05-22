@@ -3,13 +3,10 @@ require 'gosu'
 %w(
   version
   util
-  colors
-  singer
   world
   widgets
   states
-  window
-  game
+  core
 ).each { |filename| require "ultima/#{filename}" }
 
 module Ultima
