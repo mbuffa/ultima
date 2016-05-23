@@ -6,7 +6,8 @@ module Ultima
 
         @title = Widgets::Label.new('Maxime Buffa presents...',
                                     36,
-                                    fadein: true)
+                                    fadein: true,
+                                    color: Gosu::Color::CYAN)
 
         @elapsed = Gosu.milliseconds
       end

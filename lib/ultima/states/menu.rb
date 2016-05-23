@@ -5,8 +5,8 @@ module Ultima
         @game = game
 
         # TODO: Export this to a 'view' class.
-        @title = Widgets::Label.new('Ultima', 128, fadein: true)
-        @quit_btn = Widgets::Button.new('Quit', 24, fadein: true) do
+        @title = Widgets::Label.new('Ultima', 128, fadein: true, color: Gosu::Color::RED)
+        @quit_btn = Widgets::Button.new('Quit', 24, fadein: true, color: Gosu::Color::GRAY) do
           @game.window.close
         end
         @quit_btn_position = [@game.window.width / 2, @game.window.height / 2, 0]
