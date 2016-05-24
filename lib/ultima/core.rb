@@ -1,5 +1,5 @@
 %w(
-  colors
+  color
   singer
   window
   game

@@ -2,8 +2,7 @@ module Ultima
   module Widgets
     module Fading
       def initialize_fading(options)
-        # TODO: Find a way to handle any color.
-        @color = Gosu::Color.argb(Core::Colors::INVISIBLE_WHITE) if options[:fadein]
+        @color = @color.transparent if options[:fadein]
 
         @elapsed_time = 0
         @fade = 0
@@ -27,10 +26,7 @@ module Ultima
         @elapsed_time = Gosu.milliseconds
 
         if @elapsed_time >= @fade_steps && (0..255).cover?(@color.alpha + @fade)
-          @color = Gosu::Color.argb(@color.alpha + @fade,
-                                    @color.red,
-                                    @color.green,
-                                    @color.blue)
+          @color = @color.new_with_alpha(@color.alpha + @fade)
           @elapsed_time = 0
         end
       end
