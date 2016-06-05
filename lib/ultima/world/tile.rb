@@ -12,10 +12,10 @@ module Ultima
         wall: :wall
       }.freeze
 
-      attr_accessor :coords, :type, :edges, :meta
+      attr_accessor :location, :type, :edges, :meta
 
-      def initialize(coords, type: GROUD_TYPES[:free], edges: [], meta: {})
-        @coords = coords
+      def initialize(location, type: GROUD_TYPES[:free], edges: [], meta: {})
+        @location = location
         @type = type
         @edges = edges
         @meta = meta
