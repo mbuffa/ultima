@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ultima::World::Coordinates do
+describe Ultima::World::Location do
   context 'methods' do
     let(:a) { described_class.new(4, 5) }
     let(:b) { described_class.new(-3, 7) }

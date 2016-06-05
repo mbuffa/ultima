@@ -1,4 +1,5 @@
 %w(
+  rules
   color
   singer
   window

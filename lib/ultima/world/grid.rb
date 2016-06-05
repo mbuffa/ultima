@@ -1,49 +1,11 @@
 module Ultima
   module World
-    DIRECTIONS = [
-      :north,
-      :east,
-      :south,
-      :west
-    ].freeze
-
     class Grid
-      DIRECTION_TO_MOVE = {
-        north: Coordinates.new(0, 1),
-        east: Coordinates.new(1, 0),
-        south: Coordinates.new(0, -1),
-        west: Coordinates.new(-1, 0)
-      }.freeze
-
-      class Tile
-        GROUD_TYPES = {
-          free: nil,
-          liquid: :liquid,
-          block: :block
-        }.freeze
-
-        EDGE_TYPES = {
-          none: nil,
-          wall: :wall
-        }.freeze
-
-        attr_accessor :coords, :type, :edges, :meta
-
-        def initialize(coords, type: GROUD_TYPES[:free], edges: [], meta: {})
-          @coords = coords
-          @type = type
-          @edges = edges
-          @meta = meta
-        end
-      end
-
       def initialize(_filename = nil)
-        # TODO: Add support for loading maps from Grid Cartographer XML exports.
         @tiles = {}
 
-        [[0, 0], [1, 0], [1, 1], [1, -1]].each do |coords|
-          @tiles[coords] = Tile.new(coords)
-        end
+        # TODO: Add support for loading maps from Grid Cartographer XML exports.
+        build_placeholder
       end
 
       # Displays current scene (occupied tile + front, sides two levels deep),
@@ -54,7 +16,22 @@ module Ultima
       #    ..
       #
       # Returns a new array of Tiles with coordinates relative to the camera.
-      def first_person_view(camera_coords, camera_direction)
+      def first_person(camera_location, camera_direction)
+        neighbor_directions = DIRECTION_TO_NEIGHBOR_MOVE[camera_direction]
+
+        tiles = { current: @tiles[camera_location] }
+
+        [:front, :front2, :right, :rcorner, :left, :lcorner].each do |ntype|
+          nlocation = neighbor_location(camera_location,
+                                        neighbor_directions[ntype])
+          ntile = @tiles[nlocation]
+
+          next if ntile.nil?
+
+          tiles[ntype] = ntile
+        end
+
+        tiles
       end
 
       ##
@@ -64,11 +41,26 @@ module Ultima
 
       protected
 
+      def build_placeholder
+        [[0, 0], [1, 0], [1, 1], [1, -1]].each do |coords|
+          @tiles[coords] = Tile.new(Location.new(*coords))
+        end
+      end
+
       ##
       # Automatically assigns walls.
-      def build_border_edges(edge_type = EDGE_TYPES[:wall])
+      def build_borders_edges(edge_type = EDGE_TYPES[:wall])
         # TODO: Iterate through tiles, query for neighbor tiles,
         #       and assign a wall on each direction that is not linked.
+      end
+
+      def neighbor_location(current_location, directions)
+        directions = Array(directions)
+
+        directions.each do |direction|
+          current_location = current_location + DIRECTION_TO_MOVE[direction]
+        end
+        current_location
       end
     end
   end
