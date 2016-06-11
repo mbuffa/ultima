@@ -1,6 +1,7 @@
 %w(
   rules
   color
+  painter
   singer
   window
   game
