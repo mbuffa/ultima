@@ -1,7 +1,9 @@
 module Ultima
   module World
     class Grid
-      def initialize(_filename = nil)
+      attr_reader :tiles
+
+      def initialize
         @tiles = {}
 
         # TODO: Add support for loading maps from Grid Cartographer XML exports.
@@ -43,15 +45,23 @@ module Ultima
 
       def build_placeholder
         [[0, 0], [1, 0], [1, 1], [1, -1]].each do |coords|
-          @tiles[coords] = Tile.new(Location.new(*coords))
+          location = Location.new(*coords)
+          @tiles[location] = Tile.new(location)
         end
+        build_borders_edges
       end
 
-      ##
-      # Automatically assigns walls.
-      def build_borders_edges(edge_type = EDGE_TYPES[:wall])
-        # TODO: Iterate through tiles, query for neighbor tiles,
-        #       and assign a wall on each direction that is not linked.
+      def build_borders_edges(edge_type = Tile::EDGE_TYPES[:wall])
+        @tiles.each do |location, tile|
+          DIRECTIONS.each do |direction|
+            neighbor = @tiles[location + DIRECTION_TO_MOVE[direction]]
+
+            if neighbor.nil? || neighbor.edges[ INVERSE_DIRECTION[direction] ] == Tile::EDGE_TYPES[:wall]
+              puts "Adding wall to #{location} to the #{direction}"
+              tile.edges[direction] = Tile::EDGE_TYPES[:wall]
+            end
+          end
+        end
       end
 
       def neighbor_location(current_location, directions)

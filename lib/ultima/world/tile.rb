@@ -14,11 +14,15 @@ module Ultima
 
       attr_accessor :location, :type, :edges, :meta
 
-      def initialize(location, type: GROUD_TYPES[:free], edges: [], meta: {})
+      def initialize(location, type: GROUD_TYPES[:free], edges: {}, meta: {})
         @location = location
         @type = type
         @edges = edges
         @meta = meta
+      end
+
+      def free?
+        @type == GROUD_TYPES[:free]
       end
     end
   end
