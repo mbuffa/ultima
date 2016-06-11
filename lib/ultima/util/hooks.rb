@@ -8,14 +8,15 @@ module Ultima
       module ClassMethods
         [:before, :after].each do |type|
           define_method(type) do |hooks_on, options = {}, &block|
-            method = options[:do]
-            hooks_on.map { |hook_on| _hook(type, hook_on, method, &block) }
+            Array(hooks_on).map do |hook_on|
+              _hook(type, hook_on, options[:do], &block)
+            end
           end
         end
 
         private
 
-        def _hook(hook_type, hook_on, method_sym, &block)
+        def _hook(hook_type, hook_on, method_sym = nil, &block)
           prependable = Module.new do
             define_method(hook_on) do |*args|
               super(*args) if hook_type == :after

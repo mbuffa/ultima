@@ -10,9 +10,12 @@ describe Ultima::Util::Hooks do
 
         before [:a, :b] { print 1 }
 
-        after [:a] { print 2 }
+        # FIXME: Find out why the short form '{ }' conflicts with RSpec.
+        after :a do
+          print 2
+        end
 
-        before [:b], do: :c
+        before :b, do: :c
 
         def a
           print 'a'
