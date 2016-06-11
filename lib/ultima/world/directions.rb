@@ -1,5 +1,19 @@
 module Ultima
   module World
+    module Directions
+      def self.left_of(direction)
+        idx = DIRECTIONS.find_index(direction) - 1
+        idx = DIRECTIONS.size - 1 if idx < 0
+        DIRECTIONS[idx]
+      end
+
+      def self.right_of(direction)
+        idx = DIRECTIONS.find_index(direction) + 1
+        idx = 0 if idx > DIRECTIONS.size - 1
+        DIRECTIONS[idx]
+      end
+    end
+
     DIRECTIONS = [:north, :east, :south, :west].freeze
 
     DIRECTION_TO_MOVE = {
