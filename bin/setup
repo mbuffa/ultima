@@ -5,4 +5,7 @@ set -vx
 
 bundle install
 
-# Do any other automated setup that you need to do here
+cd data
+curl -O https://dl.dropboxusercontent.com/u/23714343/ultima/sprites.tar.gz
+tar zxvf sprites.tar.gz
+rm sprites.tar.gz

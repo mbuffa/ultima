@@ -4,7 +4,8 @@ module Ultima
       def initialize(game)
         @game = game
         @grid = Ultima::World::Grid.new
-        @scene = Ultima::World::Scene.new(0, 0, @game.window.width, @game.window.height)
+        # FIXME: Replace with dynamic values.
+        @scene = Ultima::World::Scene.new(400, 50, 800, 600)
         @camera = Ultima::World::Camera.new(@grid)
       end
 

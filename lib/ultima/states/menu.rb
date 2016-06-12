@@ -6,6 +6,12 @@ module Ultima
 
         # TODO: Export this to a 'view' class.
         @title = Widgets::Label.new('Ultima', 128, fadein: true, color: Gosu::Color::RED)
+
+        @play_btn = Widgets::Button.new('Play', 24, fadein: true, color: Gosu::Color::GRAY) do
+          @game.switch_state(:play)
+        end
+        @play_btn_position = [@game.window.width / 2, (@game.window.height / 2) - 48, 0]
+
         @quit_btn = Widgets::Button.new('Quit', 24, fadein: true, color: Gosu::Color::GRAY) do
           @game.window.close
         end
@@ -17,16 +23,27 @@ module Ultima
         x = (@game.window.width / 2) - (@title.width / 2)
         y = (@game.window.height / 5) - (@title.height / 2)
         z = 0
-        @title.draw(x, y, z)
 
+        @title.draw(x, y, z)
+        @play_btn.draw(*@play_btn_position)
         @quit_btn.draw(*@quit_btn_position)
       end
 
       def update
         @title.update
+        @play_btn.update
         @quit_btn.update
 
         # TODO: Export this to a 'view' class.
+        play_btn_width = Range.new(@play_btn_position.first, @play_btn_position.first + @play_btn.width)
+        play_btn_height = Range.new(@play_btn_position[1], @play_btn_position[1] + @play_btn.height)
+
+        if Gosu.button_down?(Gosu::MsLeft) &&
+           play_btn_width.cover?(@game.window.mouse_x.to_i) &&
+           play_btn_height.cover?(@game.window.mouse_y.to_i)
+          @play_btn.click!
+        end
+
         quit_btn_width = Range.new(@quit_btn_position.first, @quit_btn_position.first + @quit_btn.width)
         quit_btn_height = Range.new(@quit_btn_position[1], @quit_btn_position[1] + @quit_btn.height)
 
@@ -38,11 +55,9 @@ module Ultima
       end
 
       def enter
-        # @title.fadein!
       end
 
       def leave
-        # @title.fadeout!
       end
     end
   end
