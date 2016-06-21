@@ -1,11 +1,10 @@
 module Ultima
   module Widgets
     class Base
-      extend Ultima::Util::Abstract
+      extend Util::Abstract
 
-      attr_reader :image
-
-      def initialize(image)
+      def initialize(position, image)
+        @x, @y, @z = position
         @image = image
       end
 
@@ -15,6 +14,11 @@ module Ultima
 
       def height
         @image.height
+      end
+
+      def in?(x = 0, y = 0, z = 0)
+        return false if @z != z
+        ((@x)..(@x + width)).cover?(x) && ((@y)..(@y + height)).cover?(y)
       end
 
       abstract_methods(:draw, :update)

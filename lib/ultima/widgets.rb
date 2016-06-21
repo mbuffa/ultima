@@ -6,6 +6,8 @@
   base
   label
   button
+  scene
+  control_pad
   view
 ).each { |filename| require "ultima/widgets/#{filename}" }
 

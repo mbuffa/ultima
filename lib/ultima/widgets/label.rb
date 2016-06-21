@@ -3,15 +3,23 @@ module Ultima
     class Label < Base
       prepend Fading
 
-      def initialize(text, line_height, options = {})
+      def initialize(position, text, options = {})
         # TODO: use a font parameter.
-        super Gosu::Image.from_text(text, line_height, font: 'URW Gothic')
+        image = Gosu::Image.from_text(text,
+                                      options[:line_height],
+                                      font: 'URW Gothic')
+        unless options[:no_recenter]
+          position[0] -= image.width / 2
+          position[1] -= image.height / 2
+        end
+        super(position, image)
         @color = options[:color] || Gosu::Color::WHITE
         initialize_fading(options)
       end
 
-      def draw(x, y, z, scale_x = 1, scale_y = 1, color = nil)
-        @image.draw(x, y, z, scale_x, scale_y, color || @color)
+      def draw
+        scale_x, scale_y = [1, 1]
+        @image.draw(@x, @y, @z, scale_x, scale_y, @color)
       end
 
       def update

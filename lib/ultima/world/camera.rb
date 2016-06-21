@@ -1,7 +1,7 @@
 module Ultima
   module World
     class Camera
-      include Ultima::Util::Hooks
+      include Util::Hooks
 
       attr_accessor :direction, :location
 
