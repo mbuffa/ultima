@@ -12,6 +12,9 @@ module Ultima
 
       def initialize(position, camera)
         image = Gosu::Image.new('data/sprites/control_pad.png')
+        # TODO: Move this to Base.
+        position[0] -= image.width / 2
+        position[1] -= image.height / 2
         super(position, image)
         @x, @y, @z = position
         @camera = camera

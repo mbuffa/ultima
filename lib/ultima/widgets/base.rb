@@ -4,6 +4,7 @@ module Ultima
       extend Util::Abstract
 
       def initialize(position, image)
+        # TODO: Handle scaling/size target as well.
         @x, @y, @z = position
         @image = image
       end

@@ -6,6 +6,7 @@ require 'gosu'
   world
   widgets
   states
+  views
   core
 ).each { |filename| require "ultima/#{filename}" }
 
