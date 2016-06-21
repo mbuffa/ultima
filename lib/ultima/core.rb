@@ -3,6 +3,7 @@
   color
   painter
   singer
+  limiter
   window
   game
 ).each { |filename| require "ultima/core/#{filename}" }
