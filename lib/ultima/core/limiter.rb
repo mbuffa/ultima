@@ -7,15 +7,15 @@ module Ultima
       end
 
       def reset!
-        @action_taken_at = nil
+        @acted_at = nil
       end
 
       def act!
-        @action_taken_at = Gosu::milliseconds
+        @acted_at = Gosu::milliseconds
       end
 
       def may_act?
-        @action_taken_at.nil? || !(Gosu::milliseconds - @action_taken_at < @limit_rate)
+        @acted_at.nil? || Gosu::milliseconds - @acted_at > @limit_rate
       end
     end
   end
