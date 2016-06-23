@@ -1,7 +1,8 @@
 module Ultima
-  module Widgets
-    class Scene
+  module UI
+    class Scene < Base
       include Util::Hooks
+      include Container
 
       ASSET_WIDTH = 800
       ASSET_HEIGHT = 600
@@ -10,13 +11,15 @@ module Ultima
         puts "Fetching partial view"
       end
 
-      def initialize(position, grid, camera, size)
+      def initialize(position, grid, camera, size, window)
         @x, @y = position
         @grid = grid
         @camera = camera
         @painter = Core::Painter.new
         @width, @height = size
         @partial = {}
+        @content = []
+        @window = window
       end
 
       def draw
@@ -77,10 +80,13 @@ module Ultima
             draw_sprite(:rcorner_front_wall)
           end
         end
+
+        super
       end
 
       def update
         # Handle scene interactions here.
+        super
       end
 
       def fetch_partial
@@ -88,6 +94,14 @@ module Ultima
       end
 
       protected
+
+      def content
+        @content
+      end
+
+      def window
+        @window
+      end
 
       def draw_sprite(symbol)
         scale_x = (@width.to_f / ASSET_WIDTH.to_f)

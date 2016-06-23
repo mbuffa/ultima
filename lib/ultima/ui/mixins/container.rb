@@ -1,22 +1,24 @@
 module Ultima
-  module Views
-    class Base
-      def initialize(window)
-        @widgets = []
-        @window = window
+  module UI
+    module Container
+      extend Util::Abstract
+
+      def self.included(base)
       end
 
+      abstract_methods(:content, :window)
+
       def draw
-        @widgets.each(&:draw)
+        content.each(&:draw)
       end
 
       def update
-        @widgets.each(&:update)
+        content.each(&:update)
 
         if Gosu.button_down?(Gosu::MsLeft)
-          pointer_pos = [@window.mouse_x.to_i, @window.mouse_y.to_i]
+          pointer_pos = [window.mouse_x.to_i, window.mouse_y.to_i]
 
-          @widgets.each do |w|
+          content.each do |w|
             w.click!(pointer_pos) if w.respond_to?(:click!) &&
                                      w.in?(*pointer_pos, current_zindex)
           end
@@ -26,12 +28,7 @@ module Ultima
       protected
 
       def add_widget(widget)
-        @widgets << widget
-      end
-
-      def current_zindex
-        # STUB
-        0
+        content << widget
       end
     end
   end

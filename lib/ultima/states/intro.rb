@@ -8,11 +8,11 @@ module Ultima
         y = @game.window.height / 2
         z = 0
 
-        @title = Widgets::Label.new([x, y, z],
-                                    'Maxime Buffa presents...',
-                                    line_height: 36,
-                                    fadein: true,
-                                    color: Gosu::Color::CYAN)
+        @title = UI::Label.new([x, y, z],
+                               'Maxime Buffa presents...',
+                               line_height: 36,
+                               fadein: true,
+                               color: Gosu::Color::CYAN)
 
         @elapsed = Gosu.milliseconds
       end

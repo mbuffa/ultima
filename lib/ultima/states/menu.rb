@@ -9,27 +9,27 @@ module Ultima
         z = 0
 
         # TODO: Export this to a 'view' class.
-        @title = Widgets::Label.new([x, y, z],
-                                    'Ultima',
-                                    line_height: 128,
-                                    fadein: true,
-                                    color: Gosu::Color::RED)
+        @title = UI::Label.new([x, y, z],
+                               'Ultima',
+                               line_height: 128,
+                               fadein: true,
+                               color: Gosu::Color::RED)
 
         @play_btn_position = [@game.window.width / 2, (@game.window.height / 2) - 48, 0]
-        @play_btn = Widgets::Button.new(@play_btn_position,
-                                        'Play',
-                                        line_height: 24,
-                                        fadein: true,
-                                        color: Gosu::Color::GRAY) do
+        @play_btn = UI::Button.new(@play_btn_position,
+                                   'Play',
+                                   line_height: 24,
+                                   fadein: true,
+                                   color: Gosu::Color::GRAY) do
           @game.switch_state(:play)
         end
 
         @quit_btn_position = [@game.window.width / 2, @game.window.height / 2, 0]
-        @quit_btn = Widgets::Button.new(@quit_btn_position,
-                                        'Quit',
-                                        line_height: 24,
-                                        fadein: true,
-                                        color: Gosu::Color::GRAY) do
+        @quit_btn = UI::Button.new(@quit_btn_position,
+                                   'Quit',
+                                   line_height: 24,
+                                   fadein: true,
+                                   color: Gosu::Color::GRAY) do
           @game.window.close
         end
       end

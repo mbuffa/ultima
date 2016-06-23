@@ -4,7 +4,7 @@ require 'gosu'
   version
   util
   world
-  widgets
+  ui
   states
   views
   core

@@ -1,5 +1,5 @@
 module Ultima
-  module Widgets
+  module UI
     class ControlPad < Base
       ACTIONS_TO_ZONES = {
         turn_left!: [ [1, 1], [49, 49] ],

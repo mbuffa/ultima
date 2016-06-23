@@ -1,5 +1,5 @@
 module Ultima
-  module Widgets
+  module UI
     class Label < Base
       prepend Fading
 

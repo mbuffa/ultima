@@ -1,5 +1,5 @@
 module Ultima
-  module Widgets
+  module UI
     module Fading
       def initialize_fading(options)
         @color = @color.transparent if options[:fadein]
