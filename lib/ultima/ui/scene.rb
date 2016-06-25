@@ -7,6 +7,13 @@ module Ultima
       ASSET_WIDTH = 800
       ASSET_HEIGHT = 600
 
+      ZINDEX = {
+        immediate: 1,
+        side: -1,
+        distant: -5,
+        far: -10
+      }
+
       after :fetch_partial do
         puts "Fetching partial view"
       end
@@ -15,71 +22,29 @@ module Ultima
         @x, @y = position
         @grid = grid
         @camera = camera
-        @painter = Core::Painter.new
         @width, @height = size
+        @window = window
+        @painter = Core::Painter.new
         @partial = {}
         @content = []
-        @window = window
+      end
+
+      def side_to_edge
+        {
+          left: World::Directions.left_of(@camera.direction),
+          front: @camera.direction,
+          right: World::Directions.right_of(@camera.direction)
+        }
       end
 
       def draw
-        # FIXME: Split this (or use z-index to simplify conditions).
-        draw_sprite(:current_ground)
-        draw_sprite(:ceiling)
-
-        if !@partial[:front] || @partial[:current].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-          draw_sprite(:current_front_wall)
-        else
-          draw_sprite(:front_ground)
-
-          if @partial[:front] && @partial[:front].edges[World::Directions::left_of(@camera.direction)] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:front_left_wall)
-          end
-
-          if @partial[:front] && @partial[:front].edges[World::Directions::right_of(@camera.direction)] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:front_right_wall)
-          end
-
-          if @partial[:front] && @partial[:front].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:front_front_wall)
-          end
-        end
-
-        if !@partial[:left] || @partial[:left].edges[World::Directions::right_of(@camera.direction)] == World::Tile::EDGE_TYPES[:wall]
-          draw_sprite(:current_left_wall)
-        else
-          draw_sprite(:left_ground)
-
-          if @partial[:left] && @partial[:left].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:left_front_wall)
-          end
-        end
-
-        if @partial[:lcorner] && @partial[:current].edges[@camera.direction] != World::Tile::EDGE_TYPES[:wall]
-          draw_sprite(:front_left_ground)
-
-          if @partial[:lcorner].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:lcorner_front_wall)
-          end
-        end
-
-        if !@partial[:right] || @partial[:right].edges[World::Directions::left_of(@camera.direction)] == World::Tile::EDGE_TYPES[:wall]
-          draw_sprite(:current_right_wall)
-        else
-          draw_sprite(:right_ground)
-
-          if @partial[:right] && @partial[:right].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:right_front_wall)
-          end
-        end
-
-        if @partial[:rcorner] && @partial[:current].edges[@camera.direction] != World::Tile::EDGE_TYPES[:wall]
-          draw_sprite(:front_right_ground)
-
-          if @partial[:rcorner].edges[@camera.direction] == World::Tile::EDGE_TYPES[:wall]
-            draw_sprite(:rcorner_front_wall)
-          end
-        end
+        draw_sprite(:ceiling, ZINDEX[:immediate])
+        draw_partial(:current, ZINDEX[:immediate])
+        draw_partial(:left, ZINDEX[:side]) if @partial[:left]
+        draw_partial(:front, ZINDEX[:distant]) if @partial[:front]
+        draw_partial(:right, ZINDEX[:side]) if @partial[:right]
+        draw_partial(:lcorner, ZINDEX[:far]) if @partial[:lcorner]
+        draw_partial(:rcorner, ZINDEX[:far]) if @partial[:rcorner]
 
         super
       end
@@ -91,6 +56,13 @@ module Ultima
 
       def fetch_partial
         @partial = @grid.first_person(@camera.location, @camera.direction)
+
+        @content = @grid.entities_in(@camera.location).select do |obj|
+          obj.type == Entities::TYPES[:item] || obj.direction == @camera.direction
+        end.map do |obj|
+          # TODO: Better handle actors width and height.
+          Actors::Factory.create([@x, @y], [@width, @height], obj)
+        end
       end
 
       protected
@@ -103,10 +75,31 @@ module Ultima
         @window
       end
 
-      def draw_sprite(symbol)
+      def draw_partial(partial_type, zindex)
+        if @partial[partial_type].free?
+          draw_sprite("#{partial_type}_ground".to_sym, zindex + 1)
+        end
+
+        [:left, :front, :right].each do |side|
+          edge_type = @partial[partial_type].edges[side_to_edge[side]]
+          if [:door, :wall].include?(edge_type)
+            # Special case for doors: draw the underlying wall.
+            draw_sprite("#{partial_type}_#{side}_wall".to_sym, zindex) if edge_type == :door
+
+            draw_sprite("#{partial_type}_#{side}_#{edge_type}".to_sym, zindex)
+          end
+        end
+      end
+
+      def draw_sprite(symbol, zindex = 0)
         scale_x = (@width.to_f / ASSET_WIDTH.to_f)
         scale_y = (@height.to_f / ASSET_HEIGHT.to_f)
-        @painter.sprite(symbol).draw(@x, @y, 0, scale_x, scale_y)
+        begin
+          @painter.sprite(symbol).draw(@x, @y, zindex, scale_x, scale_y)
+        rescue => e
+          # TODO: Create a smart Logger class with no flooding
+          # puts "Missing Sprite: #{symbol}"
+        end
       end
     end
   end

@@ -1,10 +1,11 @@
 module Ultima
   module World
     class Grid
-      attr_reader :tiles
+      extend Util::Hinting
 
       def initialize
         @tiles = {}
+        @entities = Hash.new([])
 
         # TODO: Add support for loading maps from Grid Cartographer XML exports.
         build_placeholder
@@ -41,13 +42,58 @@ module Ultima
       def map(focus_coords = nil, radius = nil)
       end
 
+      def entities_in(location)
+        return @entities[location]
+      end
+      hint_method(:entities_in, [Location])
+
+      def can_move?(locations)
+        to = locations[:to]
+        from = locations[:from]
+        direction = DIRECTION_TO_MOVE.key(to - from)
+        obstacle = entities_on_edge_in(from, direction)
+        invert_obstacle = entities_on_edge_in(to, INVERSE_DIRECTION[direction])
+
+        return !@tiles[to].nil? &&
+               @tiles[to].free? &&
+               (@tiles[from].edges[direction].nil? ||
+                (obstacle && obstacle.open?) ||
+                (invert_obstacle && invert_obstacle.open?))
+      end
+
       protected
 
+      def entities_on_edge_in(location, direction)
+        entities_in(location).select { |obj| obj.direction == direction }.first
+      end
+
       def build_placeholder
+        # Walls
         [[0, 0], [1, 0], [1, 1], [1, -1]].each do |coords|
           location = Location.new(*coords)
           @tiles[location] = Tile.new(location)
         end
+
+        # Entities
+        entities = [
+          { type: Tile::EDGE_TYPES[:door], coords: [0, 0], direction: :east }
+        ]
+
+        entities.each do |obj|
+          location = Location.new(*obj[:coords])
+
+          if obj[:type] == Tile::EDGE_TYPES[:door]
+            @entities[location] << Entities::Door.new(location, obj[:direction])
+            @tiles[location].edges[obj[:direction]] = Tile::EDGE_TYPES[:door]
+
+            # Place a edge type door on the other side as well :)
+            twin_location = location + DIRECTION_TO_MOVE[obj[:direction]]
+            twin_direction = INVERSE_DIRECTION[obj[:direction]]
+
+            @tiles[twin_location].edges[twin_direction] = Tile::EDGE_TYPES[:door]
+          end
+        end
+
         build_borders_edges
       end
 

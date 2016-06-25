@@ -3,11 +3,13 @@ require 'gosu'
 %w(
   version
   util
+  core
   world
+  entities
   ui
+  actors
   states
   views
-  core
 ).each { |filename| require "ultima/#{filename}" }
 
 module Ultima
