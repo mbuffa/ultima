@@ -4,7 +4,6 @@
   tile
   grid
   camera
-  critter
 ).each { |filename| require "ultima/world/#{filename}" }
 
 module Ultima
