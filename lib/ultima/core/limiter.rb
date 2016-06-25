@@ -8,10 +8,12 @@ module Ultima
 
       def reset!
         @acted_at = nil
+        true
       end
 
       def act!
         @acted_at = Gosu::milliseconds
+        true
       end
 
       def may_act?
