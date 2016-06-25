@@ -1,4 +1,5 @@
 %w(
+  logger
   rules
   color
   painter
