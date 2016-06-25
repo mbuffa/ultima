@@ -103,7 +103,7 @@ module Ultima
             neighbor = @tiles[location + DIRECTION_TO_MOVE[direction]]
 
             if neighbor.nil? || neighbor.edges[ INVERSE_DIRECTION[direction] ] == Tile::EDGE_TYPES[:wall]
-              puts "Adding wall to #{location} to the #{direction}"
+              Core::Logger.log("Adding wall to #{location} to the #{direction}", :info)
               tile.edges[direction] = Tile::EDGE_TYPES[:wall]
             end
           end

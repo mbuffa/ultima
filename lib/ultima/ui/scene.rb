@@ -15,7 +15,7 @@ module Ultima
       }
 
       after :fetch_partial do
-        puts "Fetching partial view"
+        Core::Logger.log("Fetching partial view", :info)
       end
 
       def initialize(position, grid, camera, size, window)
@@ -97,8 +97,7 @@ module Ultima
         begin
           @painter.sprite(symbol).draw(@x, @y, zindex, scale_x, scale_y)
         rescue => e
-          # TODO: Create a smart Logger class with no flooding
-          # puts "Missing Sprite: #{symbol}"
+          Core::Logger.log("Missing Sprite: #{symbol}", :fatal)
         end
       end
     end

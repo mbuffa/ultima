@@ -19,7 +19,7 @@ module Ultima
       end
 
       def toggle!
-        p 'toggling'
+        Core::Logger.log('Toggling the door.', :info)
         @state = !@state
         true
       end

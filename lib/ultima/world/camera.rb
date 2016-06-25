@@ -7,7 +7,7 @@ module Ultima
 
       after [:strafe_left!, :turn_left!, :forward!, :turn_right!,
              :strafe_right!, :backward!] do
-        puts "Now on #{@location} heading #{@direction}"
+        Core::Logger.log("Now on #{@location} heading #{@direction}", :info)
       end
 
       def initialize(grid, direction = :north, coords = [0, 0])
