@@ -16,6 +16,12 @@ module Ultima
         new_coordinates = map.with_index { |x, i| x + other[i] }
         Location.new(*new_coordinates)
       end
+
+      def -(other)
+        raise ArgumentError, 'Must have the same size' if other.size != size
+        new_coordinates = map.with_index { |x, i| x - other[i] }
+        Location.new(*new_coordinates)
+      end
     end
   end
 end
