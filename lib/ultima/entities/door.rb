@@ -6,8 +6,8 @@ module Ultima
         closed: false
       }
 
-      def initialize(location, direction)
-        super(location, direction, Entities::TYPES[:door])
+      def initialize(location, direction, twin = nil)
+        super(location, direction, Entities::TYPES[:door], twin)
       end
 
       def open?
@@ -18,9 +18,10 @@ module Ultima
         @state == STATES[:closed]
       end
 
-      def toggle!
+      def toggle!(cascade: false)
         Core::Logger.log('Toggling the door.', :info)
         @state = !@state
+        @twin.toggle! if @twin && cascade
         true
       end
     end

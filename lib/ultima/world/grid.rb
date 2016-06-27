@@ -83,14 +83,19 @@ module Ultima
           location = Location.new(*obj[:coords])
 
           if obj[:type] == Tile::EDGE_TYPES[:door]
-            @entities[location] << Entities::Door.new(location, obj[:direction])
+            original = Entities::Door.new(location, obj[:direction])
+            @entities[location] << original
             @tiles[location].edges[obj[:direction]] = Tile::EDGE_TYPES[:door]
 
             # Place a edge type door on the other side as well :)
             twin_location = location + DIRECTION_TO_MOVE[obj[:direction]]
             twin_direction = INVERSE_DIRECTION[obj[:direction]]
 
+            twin = Entities::Door.new(twin_location, twin_direction, original)
+            @entities[twin_location] << twin
             @tiles[twin_location].edges[twin_direction] = Tile::EDGE_TYPES[:door]
+
+            original.twin = twin
           end
         end
 

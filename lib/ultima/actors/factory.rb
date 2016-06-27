@@ -5,7 +5,7 @@ module Ultima
         if entity.type == Entities::TYPES[:door]
           obj = Actor.new(position, size, entity)
           obj.on_click do
-            @entity.toggle!
+            @entity.toggle!(cascade: true)
           end
         end
         obj
