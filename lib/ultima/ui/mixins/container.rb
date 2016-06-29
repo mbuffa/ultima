@@ -3,9 +3,6 @@ module Ultima
     module Container
       extend Util::Abstract
 
-      def self.included(base)
-      end
-
       abstract_methods(:content, :window)
 
       def draw

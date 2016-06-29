@@ -22,9 +22,9 @@ module Ultima
         ((@x)..(@x + width)).cover?(x) && ((@y)..(@y + height)).cover?(y)
       end
 
-      protected
-
       abstract_methods(:draw, :update)
+
+      protected
 
       def current_zindex
         @z

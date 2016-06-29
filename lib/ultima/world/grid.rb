@@ -5,7 +5,7 @@ module Ultima
 
       def initialize
         @tiles = {}
-        @entities = Hash.new([])
+        @entities = {}
 
         # TODO: Add support for loading maps from Grid Cartographer XML exports.
         build_placeholder
@@ -64,7 +64,7 @@ module Ultima
       protected
 
       def entities_on_edge_in(location, direction)
-        entities_in(location).select { |obj| obj.direction == direction }.first
+        (entities_in(location) || []).select { |obj| obj.direction == direction }.first
       end
 
       def build_placeholder
@@ -84,6 +84,7 @@ module Ultima
 
           if obj[:type] == Tile::EDGE_TYPES[:door]
             original = Entities::Door.new(location, obj[:direction])
+            @entities[location] ||= []
             @entities[location] << original
             @tiles[location].edges[obj[:direction]] = Tile::EDGE_TYPES[:door]
 
@@ -92,13 +93,13 @@ module Ultima
             twin_direction = INVERSE_DIRECTION[obj[:direction]]
 
             twin = Entities::Door.new(twin_location, twin_direction, original)
+            @entities[twin_location] ||= []
             @entities[twin_location] << twin
             @tiles[twin_location].edges[twin_direction] = Tile::EDGE_TYPES[:door]
 
             original.twin = twin
           end
         end
-
         build_borders_edges
       end
 

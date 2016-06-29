@@ -8,7 +8,7 @@ module Ultima
       ASSET_HEIGHT = 600
 
       ZINDEX = {
-        immediate: 1,
+        near: 1,
         side: -1,
         distant: -5,
         far: -10
@@ -38,14 +38,13 @@ module Ultima
       end
 
       def draw
-        draw_sprite(:ceiling, ZINDEX[:immediate])
-        draw_partial(:current, ZINDEX[:immediate])
+        draw_sprite(:ceiling, ZINDEX[:near])
+        draw_partial(:current, ZINDEX[:near])
         draw_partial(:left, ZINDEX[:side]) if @partial[:left]
         draw_partial(:front, ZINDEX[:distant]) if @partial[:front]
         draw_partial(:right, ZINDEX[:side]) if @partial[:right]
         draw_partial(:lcorner, ZINDEX[:far]) if @partial[:lcorner]
         draw_partial(:rcorner, ZINDEX[:far]) if @partial[:rcorner]
-
         super
       end
 
@@ -57,10 +56,9 @@ module Ultima
       def fetch_partial
         @partial = @grid.first_person(@camera.location, @camera.direction)
 
-        @content = @grid.entities_in(@camera.location).select do |obj|
+        @content = (@grid.entities_in(@camera.location) || []).select do |obj|
           obj.type == Entities::TYPES[:item] || obj.direction == @camera.direction
         end.map do |obj|
-          # TODO: Better handle actors width and height.
           Actors::Factory.create([@x, @y], [@width, @height], obj)
         end
       end
@@ -84,9 +82,7 @@ module Ultima
           edge_type = @partial[partial_type].edges[side_to_edge[side]]
           if [:door, :wall].include?(edge_type)
             # Special case for doors: draw the underlying wall.
-            draw_sprite("#{partial_type}_#{side}_wall".to_sym, zindex) if edge_type == :door
-
-            draw_sprite("#{partial_type}_#{side}_#{edge_type}".to_sym, zindex)
+            draw_sprite("#{partial_type}_#{side}_wall".to_sym, zindex)
           end
         end
       end

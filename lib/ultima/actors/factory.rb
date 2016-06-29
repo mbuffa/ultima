@@ -3,8 +3,9 @@ module Ultima
     class Factory
       def self.create(position, size, entity)
         if entity.type == Entities::TYPES[:door]
-          obj = Actor.new(position, size, entity)
-          obj.on_click do
+          # FIXME: Replace this properly.
+          image = Gosu::Image.new('data/sprites/current_front_door.png')
+          obj = Actor.new(position, size, entity, image) do
             @entity.toggle!(cascade: true)
           end
         end
