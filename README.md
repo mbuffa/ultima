@@ -2,29 +2,43 @@
 
 [![Build Status](https://travis-ci.org/mbuffa/ultima.svg?branch=master)](https://travis-ci.org/mbuffa/ultima)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ultima`. To experiment with that code, run `bin/console` for an interactive prompt.
+Ultima is a dungeon crawler prototype inspired by great games such as *Dungeon Master*, *Eye of the Beholder* and *Lands of Lore* (although it is very unlikely that it'll ever get superb and colorful graphics such as those of these two last ones) released back in the 80's and 90's, and whose goal consisted of exploring tiled maps (usually dark dungeons infested with monsters and traps) with a limited party of adventurers, using a fake 3D first person view and sprites.
 
-TODO: Delete this and the text above, and describe your gem
+The name 'Ultima' is a low reference to Lord British's first game, *Akalabeth: World of Doom*.
+
+It's under development at a pretty early stage right now: I only work on it on my spare time, and I'm writing it in Ruby, which, at first, may seem odd or unreasonable. Yet I'm confident it'll allow me to experiment and perform reasonably well for my needs (ie. it should be ok for a game like this without targeting low-end computers).
 
 ## Installation
 
-Add this line to your application's Gemfile:
+In a Linux or OS X console:
 
-```ruby
-gem 'ultima'
-```
+    $ git clone git@github.com:mbuffa/ultima.git
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install ultima
+Depending on your setup, you may also need to install some native libraries in order to build gosu and texplay. Please refer to their own installation guides:
+* [Gosu wiki page](https://github.com/gosu/gosu/wiki)
+* [Texplay github repo](https://github.com/banister/texplay)
 
 ## Usage
 
-TODO: Write usage instructions here
+First, download assets by running:
+
+```ruby
+./bin/setup
+```
+
+And then run the game:
+
+```ruby
+./bin/game
+```
+
+And thank me for getting you blind!
+
+You can edit one or two settings by editing `data/settings.json` and by figuring out which does what :)
 
 ## Development
 
@@ -34,8 +48,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/ultima.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/mbuffa/ultima.
 
 ## License
 
