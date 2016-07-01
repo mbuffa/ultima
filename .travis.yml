@@ -14,4 +14,4 @@ addons:
       - libfreeimage-dev
       - libopenal-dev
       - libsndfile1-dev
-      - freeglut3
+      - freeglut3-dev
