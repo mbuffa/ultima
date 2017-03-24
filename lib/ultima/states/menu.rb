@@ -4,29 +4,41 @@ module Ultima
       def initialize(game)
         @game = game
 
-        # TODO: Export this to a 'view' class.
-        @title = Widgets::Label.new('Ultima', 128, fadein: true, color: Gosu::Color::RED)
+        x = @game.window.width / 2
+        y = @game.window.height / 5
+        z = 0
 
-        @play_btn = Widgets::Button.new('Play', 24, fadein: true, color: Gosu::Color::GRAY) do
+        # TODO: Export this to a 'view' class.
+        @title = UI::Label.new([x, y, z],
+                               'Ultima',
+                               line_height: 128,
+                               fadein: true,
+                               color: Gosu::Color::RED)
+
+        @play_btn_position = [@game.window.width / 2, (@game.window.height / 2) - 48, 0]
+        @play_btn = UI::Button.new(@play_btn_position,
+                                   'Play',
+                                   line_height: 24,
+                                   fadein: true,
+                                   color: Gosu::Color::GRAY) do
           @game.switch_state(:play)
         end
-        @play_btn_position = [@game.window.width / 2, (@game.window.height / 2) - 48, 0]
 
-        @quit_btn = Widgets::Button.new('Quit', 24, fadein: true, color: Gosu::Color::GRAY) do
+        @quit_btn_position = [@game.window.width / 2, @game.window.height / 2, 0]
+        @quit_btn = UI::Button.new(@quit_btn_position,
+                                   'Quit',
+                                   line_height: 24,
+                                   fadein: true,
+                                   color: Gosu::Color::GRAY) do
           @game.window.close
         end
-        @quit_btn_position = [@game.window.width / 2, @game.window.height / 2, 0]
       end
 
       def draw
         # TODO: Export this to a 'view' class.
-        x = (@game.window.width / 2) - (@title.width / 2)
-        y = (@game.window.height / 5) - (@title.height / 2)
-        z = 0
-
-        @title.draw(x, y, z)
-        @play_btn.draw(*@play_btn_position)
-        @quit_btn.draw(*@quit_btn_position)
+        @title.draw
+        @play_btn.draw
+        @quit_btn.draw
       end
 
       def update

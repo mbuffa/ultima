@@ -24,6 +24,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rubocop-rspec'
+  spec.add_development_dependency 'curses'
 
   spec.add_dependency 'gosu'
+  spec.add_dependency 'texplay', '~> 0.4.4pre'
 end

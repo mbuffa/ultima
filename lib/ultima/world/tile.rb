@@ -9,7 +9,8 @@ module Ultima
 
       EDGE_TYPES = {
         none: nil,
-        wall: :wall
+        wall: :wall,
+        door: :door
       }.freeze
 
       attr_accessor :location, :type, :edges, :meta

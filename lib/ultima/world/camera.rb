@@ -1,13 +1,13 @@
 module Ultima
   module World
     class Camera
-      include Ultima::Util::Hooks
+      include Util::Hooks
 
       attr_accessor :direction, :location
 
       after [:strafe_left!, :turn_left!, :forward!, :turn_right!,
              :strafe_right!, :backward!] do
-        puts "Now on #{@location} heading #{@direction}"
+        Core::Logger.log("Now on #{@location} heading #{@direction}", :info)
       end
 
       def initialize(grid, direction = :north, coords = [0, 0])
@@ -18,9 +18,7 @@ module Ultima
 
       def strafe_left!
         direction = DIRECTION_TO_NEIGHBOR_MOVE[@direction][:left]
-        nlocation = @location + DIRECTION_TO_MOVE[direction]
-        return if !@grid.tiles[nlocation] || !@grid.tiles[nlocation].free?
-        @location = nlocation
+        move_to(@location + DIRECTION_TO_MOVE[direction])
       end
 
       def turn_left!
@@ -29,9 +27,7 @@ module Ultima
 
       def forward!
         direction = DIRECTION_TO_NEIGHBOR_MOVE[@direction][:front]
-        nlocation = @location + DIRECTION_TO_MOVE[direction]
-        return if !@grid.tiles[nlocation] || !@grid.tiles[nlocation].free?
-        @location = nlocation
+        move_to(@location + DIRECTION_TO_MOVE[direction])
       end
 
       def turn_right!
@@ -40,16 +36,19 @@ module Ultima
 
       def strafe_right!
         direction = DIRECTION_TO_NEIGHBOR_MOVE[@direction][:right]
-        nlocation = @location + DIRECTION_TO_MOVE[direction]
-        return if !@grid.tiles[nlocation] || !@grid.tiles[nlocation].free?
-        @location = nlocation
+        move_to(@location + DIRECTION_TO_MOVE[direction])
       end
 
       def backward!
         inverse = INVERSE_DIRECTION[@direction]
-        nlocation = @location + DIRECTION_TO_MOVE[inverse]
-        return if !@grid.tiles[nlocation] || !@grid.tiles[nlocation].free?
-        @location = nlocation
+        move_to(@location + DIRECTION_TO_MOVE[inverse])
+      end
+
+      protected
+
+      def move_to(new_location)
+        return false if !@grid.can_move?(to: new_location, from: @location)
+        @location = new_location
       end
     end
   end

@@ -3,18 +3,21 @@ module Ultima
     class Play < Abstract
       def initialize(game)
         @game = game
-        @grid = Ultima::World::Grid.new
-        # FIXME: Replace with dynamic values.
-        @scene = Ultima::World::Scene.new(400, 50, 800, 600)
-        @camera = Ultima::World::Camera.new(@grid)
+        @grid = World::Grid.new
+        @camera = World::Camera.new(@grid)
+
+        @view = Views::Play.new(@game.window, @grid, @camera)
+        @limiter = Core::Limiter.new(Core::Rules::ACTIONS_LIMIT)
       end
 
       def draw
-        @scene.draw(@camera)
+        @view.draw
       end
 
       def update
-        return if action_taken?
+        return if !@limiter.may_act?
+
+        @view.update
 
         if Gosu::button_down?(Gosu::KbNumpad4)
           @camera.strafe_left!
@@ -38,9 +41,8 @@ module Ultima
       end
 
       def enter
-        @action_taken_at = nil
-
-        update_scene
+        @limiter.reset!
+        @view.scene.fetch_partial
       end
 
       def leave
@@ -48,18 +50,9 @@ module Ultima
 
       private
 
-      def action_taken?
-        return false if @action_taken_at.nil?
-        Gosu::milliseconds - @action_taken_at < Core::Rules::ACTIONS_LIMIT
-      end
-
       def action_taken!
-        @action_taken_at = Gosu::milliseconds
-        update_scene
-      end
-
-      def update_scene
-        @scene.update(@grid, @camera)
+        @limiter.act!
+        @view.scene.fetch_partial
       end
     end
   end

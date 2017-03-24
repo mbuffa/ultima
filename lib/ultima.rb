@@ -1,12 +1,16 @@
 require 'gosu'
+require 'texplay'
 
 %w(
   version
   util
-  world
-  widgets
-  states
   core
+  world
+  entities
+  ui
+  actors
+  states
+  views
 ).each { |filename| require "ultima/#{filename}" }
 
 module Ultima

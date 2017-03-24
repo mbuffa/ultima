@@ -12,14 +12,15 @@ module Ultima
           play: States::Play.new(self)
         }
         @current = :intro
+        @limiter = Core::Limiter.new(Core::Rules::LOGGER_LIMIT)
 
         @states[@current].enter
       end
 
       def update
         @window.close if Gosu.button_down?(Gosu::KbEscape)
-
         @states[@current].update
+        @limiter.act! && Thread.new { Logger.update } if @limiter.may_act?
       end
 
       def draw

@@ -1,10 +1,10 @@
 module Ultima
-  module Widgets
+  module UI
     class Button < Label
       prepend Fading
 
-      def initialize(text, line_height, options = {}, &block)
-        super(text, line_height, options)
+      def initialize(position, text, options = {}, &block)
+        super(position, text, options)
         @block = block
       end
 
